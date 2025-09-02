@@ -5,6 +5,7 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind(("", PORT))
 s.listen(5)
 
+
 def log_it(log):
     try:
         with open("log.txt", "a") as log_file:
