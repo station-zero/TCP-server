@@ -14,16 +14,12 @@ session = {
 }
 
 def log_it():
-    try:
-        with open("log.txt", "a") as log_file:
-            client_ip = session["client_ip"]
-            http_header = session["http_header"]
-            size = session["size"]
-            date = str(datetime.now())
-            
-            log_file.write(f"{client_ip} - - {date} \" {http_header}\" {size} \n")
-    except:
-        print("log error")
+    with open("log.txt", "a") as log_file:
+        client_ip = session["client_ip"]
+        http_header = session["client_header"]
+        size = session["size"]
+        date = str(datetime.now())
+        log_file.write(f"{client_ip} - - {date} \" {http_header}\" {size} \n")
 
 def send_reply(status_code, body):
     if status_code == "404":
