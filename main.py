@@ -13,6 +13,7 @@ session = {
 }
 
 def log_it(client_ip, size, http_header):
+    print("log file")
     try:
         with open("log.txt", "a") as log_file:
             date = str(datetime.now())
@@ -35,12 +36,10 @@ def send_reply(status_code, body):
     payload_encoded = payload.encode()
     size = len(payload_encoded)
     
-    connection.sendto(payload_encoded, client)
-
     log_it(session["client_ip"], session["client_header"], session["response_code"], size)
-
-    print("send response to client")
-
+    
+    connection.sendto(payload_encoded, client)
+    
 def unpack_header(header):
     response_txt = ""
     header_lines = header.split("\r\n")
@@ -68,7 +67,7 @@ def unpack_header(header):
     send_reply(methode, response_txt)
 
 while True:
-    connection , client = s.accept()
+    connection ,client = s.accept()
     try:
         data = connection.recv(2048).decode()
         if data != "":
@@ -76,4 +75,4 @@ while True:
             connection.close()
     except:
         connection.close()
-        s.close()
+s.close()
