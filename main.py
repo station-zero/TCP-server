@@ -13,7 +13,7 @@ session = {
     "size": ""
 }
 
-def log_it(log):
+def log_it():
     try:
         with open("log.txt", "a") as log_file:
             client_ip = session["client_ip"]
@@ -23,7 +23,7 @@ def log_it(log):
             
             log_file.write(f"{client_ip} - - {date} \" {http_header}\" {size} \n")
     except:
-        pass
+        print("log error")
 
 def send_reply(status_code, body):
     if status_code == "404":
@@ -38,8 +38,10 @@ def send_reply(status_code, body):
     
     payload = header + body
     payload_encoded = payload.encode()
-    sesion["size"] = len(payload_encoded)
+    session["size"] = len(payload_encoded)
     
+    log_it()
+
     connection.sendto(payload_encoded, client)
 
     print("send response to client")
