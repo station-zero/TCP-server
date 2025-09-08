@@ -40,6 +40,8 @@ def parse_content_type(filetype):
             return "Content-Type: text/css"
         case "js":
             return "Content-Type: text/javascript"
+        case _:
+            return "Content-Type: text/html" 
 
 def send_reply(status_code, body, filetype):
     if status_code == "404":
@@ -75,7 +77,6 @@ def unpack_header(header):
         methode = request[0]
         file = request[1]
         httpv = request[2]
-        filetype = file.split(".")[1] #only works when we specify the filetype in uri...
         #print("Filetype: " + filetype)
         print("request from: " + client[0])
         print("methode: " + methode)
@@ -94,6 +95,12 @@ def unpack_header(header):
         except:
             methode = "404"
     else:
+        methode = "400"
+
+    try:
+        filetype = file.split(".")[1] #only works when we specify the filetype in uri...
+    except:
+        filetype = ""
         methode = "400"
 
     session["client_header"] = header_lines[0]
