@@ -2,7 +2,7 @@ import socket
 import pytz # Module for parsing timezone shenanigans
 from datetime import datetime
 
-PORT = 16000
+PORT = 80
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind(("", PORT))
 s.listen(5)
@@ -56,8 +56,6 @@ def send_reply(status_code, body, filetype):
     header += f"Date: {generate_response_datetime()}\r\n"
     header += parse_content_type(filetype) + "\r\n"
     header += "\r\n" # Finishing the header
-
-    print("Request headers: " + payload)
 
     payload = header + body #data in response
     payload_encoded = payload.encode()
