@@ -98,7 +98,7 @@ def unpack_header(header):
     try:
         filetype = file.split(".")[1] #only works when we specify the filetype in uri...
     except:
-        filetype = ""
+        filetype = None
         methode = "400"
 
     session["client_header"] = header_lines[0]
