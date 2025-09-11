@@ -57,6 +57,7 @@ def send_reply(status_code, body, filetype):
     header += parse_content_type(filetype) + "\r\n"
     header += "\r\n" # Finishing the header
 
+    
     payload = header + body #data in response
     payload_encoded = payload.encode()
     session["size"] = len(payload_encoded)
@@ -65,6 +66,23 @@ def send_reply(status_code, body, filetype):
 
     connection.sendto(payload_encoded, client)
     print("send response to client")
+    
+def html_error_reply(statuscode, description):
+    return f"""
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Hello, world!</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <meta name="description" content="" />
+        <link rel="icon" href="favicon.png">
+    </head>
+    <body>
+        <h1>Error {statuscode} occured:\n {description} \nTry again or contact site owner</h1>
+    </body>
+    </html>"""
+
 
 def unpack_header(header):
     response_txt = ""
@@ -90,16 +108,19 @@ def unpack_header(header):
         try:
             with open(file[1:]) as f:
                 response_txt = f.read()
+            
         except:
             methode = "404"
+            response_txt = html_error_reply(methode, description="404: Page not found")
+        # We split the requested file's filetype and send it to response for header stuff
+        try:
+            filetype = file.split(".")[1] #only works when we specify the filetype in uri...
+        except:
+            filetype = None
     else:
         methode = "400"
-
-    try:
-        filetype = file.split(".")[1] #only works when we specify the filetype in uri...
-    except:
         filetype = None
-        methode = "400"
+        response_txt = html_error_reply(methode, description="400: Bad Request")
 
     session["client_header"] = header_lines[0]
     session["client_ip"] = client[0]
